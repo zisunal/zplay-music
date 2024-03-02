@@ -1,27 +1,17 @@
 {
-    "name": "zplay-music",
-    "version": "1.0.0",
-    "description": "A music feed and podcast app",
-    "main": "index.js",
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-scripts": "0.9.5"
+    },
+    "devDependencies": {},
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "zisunal/zplay-music"
-    },
-    "keywords": [
-        "zplay",
-        "music",
-        "player",
-        "live",
-        "music",
-        "podcast",
-        "music",
-        "feed",
-        "artists",
-        "playlists"
-    ],
-    "author": "MD Al Fariya Zisun",
-    "license": "MIT"
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+    }
 }
