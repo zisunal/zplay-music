@@ -1,21 +1,29 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Home from './screens/home';
+import Login from './screens/login';
+import Register from './screens/register';
+import Nav from './components/nav';
+import Music from './screens/music';
+import Forgot from './screens/forgot';
 
-class App extends Component {
-  render() {
+function App () {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+        <div className="App">
+            <BrowserRouter>
+                <Nav />
+                <div className='pages'>
+                    <Routes>
+                        <Route path='/' element={<Home />} />
+                        <Route path='/music/:id' element={<Music />} />
+                        <Route path='/login' element={<Login />} />
+                        <Route path='/register' element={<Register />} />
+                        <Route path='/forgot' element={<Forgot />} />
+                        <Route path='*' element={<h1>Not Found 404</h1>} />
+                    </Routes>
+                </div>
+            </BrowserRouter>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    )
 }
 
 export default App;
