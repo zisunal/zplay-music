@@ -1,0 +1,31 @@
+{
+  "name": "zplay-music-server",
+  "version": "1.0.0",
+  "description": "Server-side integration for the ZPlay Music app that is basically a Music feed and podcast app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "zplay",
+    "music",
+    "music",
+    "podcast",
+    "music",
+    "feed",
+    "songs"
+  ],
+  "author": "MD Al Fariya Zisun",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.0"
+  },
+  "devDependencies": {
+    "install": "^0.13.0",
+    "nodemon": "^3.1.0",
+    "npm": "^10.5.0"
+  }
+}
