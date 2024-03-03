@@ -1,6 +1,14 @@
 import {Link} from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import { LoginContext } from '../contexts/login-context';
 
 const Nav = () => {
+    const { isLoggedIn, userData } = useContext(LoginContext);
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        setUser(userData);
+    }, [userData]);
+    
     return (
         <header>
             <div className="container">
@@ -9,12 +17,28 @@ const Nav = () => {
                 </Link>
                 <nav>
                     <ul>
-                        <li>
-                            <Link to="/login" data-text="Login">Login</Link>
-                        </li>
-                        <li>
-                            <Link to="/register" data-text="Register">Register</Link>
-                        </li>
+                    {
+                        (isLoggedIn) ? (
+                            <li>
+                                <Link to="/profile" data-text={user && user.fullName}>{user && user.fullName}</Link>
+                            </li>
+                        ) : (
+                            <li>
+                                <Link to="/register" data-text="Register">Register</Link>
+                            </li>
+                        )
+                    }
+                    {
+                        (isLoggedIn) ? (
+                            <li>
+                                <Link to="/logout" data-text="Logout">Logout</Link>
+                            </li>
+                        ) : (
+                            <li>
+                                <Link to="/login" data-text="Login">Login</Link>
+                            </li>
+                        )
+                    }
                     </ul>
                 </nav>
             </div>
