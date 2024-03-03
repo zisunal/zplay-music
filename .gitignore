@@ -1,11 +1,11 @@
 # Ignore node_modules and .env files
-**/backend/node_modules/
-**/backend/.env
-**/frontend/node_modules/
-**/frontend/coverage
-**/frontend/build
-**/frontend/.DS_Store
-**/frontend/.env
-**/frontend/npm-debug.log*
-**/frontend/yarn-debug.log*
-**/frontend/yarn-error.log*
+/backend/node_modules/
+/backend/.env
+/frontend/node_modules/
+/frontend/coverage
+/frontend/build
+/frontend/.DS_Store
+/frontend/.env
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
