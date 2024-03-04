@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { LoginContext } from '../contexts/login-context'
 import ProfileForm from '../components/profile-form'
+import UpdateEmailForm from '../components/update-email-form'
 
 const Profile = () => {
     const { isLoggedIn, userData } = useContext(LoginContext)
@@ -16,6 +17,7 @@ const Profile = () => {
         <div className="login">
             <h3>Edit Your Profile</h3>
             <ProfileForm user={user} />
+            <UpdateEmailForm user={user} />
         </div>
     )
 }

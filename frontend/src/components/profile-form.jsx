@@ -7,6 +7,20 @@ const ProfileForm = ({ user }) => {
     const [yearb, setYearb] = useState('')
     const [dateb, setDateb] = useState('')
     const [gender, setGender] = useState('')
+    const [age, setAge] = useState('')
+
+    const calculateAge = () => {
+        if (user.dob) {
+            const today = new Date();
+            const dob = new Date(user.dob);
+            const ageInMilliseconds = today - dob;
+            const ageInDays = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24))
+            const years = Math.floor(ageInDays / 365)
+            const months = Math.floor((ageInDays % 365) / 30)
+            const days = (ageInDays % 365) % 30
+            setAge(`${years} year${years > 1 ? 's': ''}, ${months} month${months > 1 ? 's': ''}, ${days} day${days > 1 ? 's': ''}`)
+        }
+    }
 
     useEffect(() => {
         if (user) {
@@ -15,6 +29,7 @@ const ProfileForm = ({ user }) => {
             setYearb(new Date(user.dob).getFullYear())
             setDateb(new Date(user.dob).getDate())
             setGender(user.gender)
+            calculateAge()
         }
     }, [user])
 
@@ -103,6 +118,7 @@ const ProfileForm = ({ user }) => {
                     <label htmlFor="yearb">Y</label>
                 </div>
             </div>
+            <h4 style={{ color: 'var(--primary-color)' }} >Age: {age}</h4>
             <div className="input-group">
                 <select 
                     id="gender" 
