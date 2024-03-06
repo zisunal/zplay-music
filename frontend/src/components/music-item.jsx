@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { faThumbsUp, faPlay } from '@fortawesome/free-solid-svg-icons';
 import thumbnail from '../img/song.png';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const intl = new Intl.NumberFormat('en-US', { 
     notation: "compact", 
@@ -10,17 +10,13 @@ const intl = new Intl.NumberFormat('en-US', {
 });
 
 const MusicItem = ({ music }) => {
-    const navigate = useNavigate()
-    const handleClick = () => {
-        navigate(`/music/${music.id}`)
-    }
     return (
-        <div onClick={handleClick} className="content">
+        <Link to={`/music/${music.id}`} className="content">
             <img src={thumbnail} alt="thumbnail" />
             <h3>{ music.title }</h3>
             <div className="meta">
-                <p>Artist: { music.artist }</p>
-                <p>Album: { music.album }</p>
+                <p>Artist: <Link to={'/artist/' + music.artistId} >{ music.artist }</Link></p>
+                <p>Album: <Link to={'/album/' + music.albumId} >{ music.album }</Link></p>
             </div>
             <div className="stats">
                 <p>
@@ -33,7 +29,7 @@ const MusicItem = ({ music }) => {
             <button className='play-btn'>
                 <FontAwesomeIcon icon={faPlay} />
             </button>
-        </div>
+        </Link>
     );
 }
 

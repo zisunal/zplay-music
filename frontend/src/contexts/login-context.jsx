@@ -19,7 +19,10 @@ export const LoginProvider = ({ children }) => {
             });
             if (response.ok) {
                 const userDataVal = await response.json()
-                return userDataVal
+                setIsLoggedIn(true)
+                setUserData(userDataVal)
+            } else {
+                setIsLoggedIn(false)
             }
         } catch (error) {
             // Handle network or other errors
@@ -42,12 +45,10 @@ export const LoginProvider = ({ children }) => {
         if (token) {
             const expiry = checkExpiryofToken(token)
             if (expiry < new Date().getTime()) {
+                setIsLoggedIn(false)
                 localStorage.removeItem('token')
             } else {
-                setIsLoggedIn(true)
-                fetchUserData(token).then((userDataVal) => {
-                    setUserData(userDataVal)
-                })
+                fetchUserData(token)
             }
         }
     }, [userData]);
