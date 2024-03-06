@@ -14,7 +14,7 @@ zplay-music is a web application that allows users to discover and listen to mus
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/zisunal/zplay-music.git`
-2. Navigate to the project's backend. Rename .env-sample file to .env and then change the values as described there
+2. Navigate to the project's `backend` directory. Rename `.env-sample` file to `.env` and then change the values as described there
 3. Navigate to the project's backend directory: `cd zplay-music/backend`
 4. Install dependencies: `npm install`
 5. Start the application: `npm start`
