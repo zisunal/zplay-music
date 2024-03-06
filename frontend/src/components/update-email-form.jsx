@@ -82,8 +82,8 @@ const UpdateEmailForm = ({ user }) => {
     }
 
     return (
-        <><h3 style={{marginTop: '15px'}}>Update Email</h3>
         <form onSubmit={form == 'fst' ? handleForm : handleOTP}>
+            <h3>Update Email</h3>
             <div className="input-group">
                 <input
                     id='email'
@@ -104,7 +104,7 @@ const UpdateEmailForm = ({ user }) => {
                     value={otpval}
                     onChange={e => {setOtpval(e.target.value)}}
                 />
-                <label htmlFor="email" style={{ display: otpdisplay }}>
+                <label htmlFor="otp" style={{ display: otpdisplay }}>
                     OTP
                 </label>
             </div>
@@ -112,7 +112,7 @@ const UpdateEmailForm = ({ user }) => {
                 { formbtn }
                 <FontAwesomeIcon icon={faRightToBracket} />
             </button>
-        </form></>
+        </form>
     );
 }
 

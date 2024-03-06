@@ -144,7 +144,7 @@ body {
     }
     .login {
         width: 100%;
-        padding: 20px clamp(10px, 5%, 20px);
+        padding: 20px clamp(10px, 5%, 10%);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -172,8 +172,15 @@ body {
                 text-align: right;
             }
         }
+        .hor {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+        }
     }
     form {
+        margin: 0 auto;
         width: 100%;
         max-width: 400px;
         display: flex;
@@ -217,8 +224,9 @@ body {
             }
         }
         .form-group {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
             .input-group {
                 min-width: 105px;
                 margin-right: 5%;

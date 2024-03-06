@@ -20,7 +20,7 @@ const Nav = () => {
                     {
                         (isLoggedIn) ? (
                             <li>
-                                <Link to="/profile" data-text={user && user.fullName}>{user && user.fullName}</Link>
+                                <Link to="/profile" data-text={user && user.username}>{user && user.username}</Link>
                             </li>
                         ) : (
                             <li>

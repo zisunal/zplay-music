@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser, faVenusMars, faCakeCandles } from '@fortawesome/free-solid-svg-icons'
 
 const ProfileForm = ({ user }) => {
     const [fullName, setFullName] = useState('')
@@ -77,7 +79,10 @@ const ProfileForm = ({ user }) => {
                 />
                 <label htmlFor="fullName">Name</label>
             </div>
-            <h3>Date of Birth</h3>
+            <h3> 
+                <FontAwesomeIcon icon={faCakeCandles} style={{ marginRight: "10px" }} />
+                Date of Birth
+            </h3>
             <div className="form-group">
                 <div className="input-group">
                     <input 
@@ -131,11 +136,14 @@ const ProfileForm = ({ user }) => {
                     <option value="female" { ... (gender == 'female') ? ('selected') : '' }>Female</option> 
                     <option value="other" { ... (gender == 'other') ? ('selected') : '' }>Other</option> 
                 </select>
-                <label htmlFor="gender">Gender</label>
+                <label htmlFor="gender">
+                    <FontAwesomeIcon icon={faVenusMars} />
+                </label>
             </div>
-            <div>
-                <button type="submit">Update Profile</button>
-            </div>
+            <button type="submit">
+                Update Profile
+                <FontAwesomeIcon icon={faUser} />
+            </button>
         </form>
     );
 }

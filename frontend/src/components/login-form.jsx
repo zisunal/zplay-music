@@ -19,8 +19,17 @@ const LoginForm = () => {
         })
         const data = await response.json()
         if (data.token) {
+            if (localStorage.getItem('token') !== null) {
+                localStorage.removeItem('token')
+            }
             localStorage.setItem('token', data.token)
-            window.location.href = '/'
+            Swal.fire({
+                title: 'Success',
+                icon: 'success',
+                text: 'Logged in successfully'
+            }).then(() => {
+                window.location.href = '/'
+            })
         } else {
             Swal.fire({
                 title: 'Error',

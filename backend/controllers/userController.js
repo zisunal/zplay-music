@@ -138,7 +138,7 @@ const getUserData = async (req, res) => {
         const token = req.headers.authorization.split(' ')[1]
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const userId = decoded.id
-        const user = await User.findById(userId).select('-password')
+        const user = await User.findById(userId).select('-password -otp')
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
@@ -253,6 +253,194 @@ const updateEmail = async (req, res) => {
     })
 }
 
+/**
+ * Checks the availability of a username.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The availability of the username.
+ */
+const checkUsername = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const userId = decoded.id
+    const user = await User.findById(userId)
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' })
+    }
+    if (user.username == req.body.username) {
+        return res.status(400).json({ message: 'New Username can not be same as earlier' })
+    }
+    await User.where('username', req.body.username).then(result => {
+        if (result.length > 0) {
+            return res.status(200).json({ message: 'Username already exists', available: false })
+        } else {
+            return res.status(200).json({ message: 'Username is available', available: true, username: req.body.username })
+        }
+    })
+}
+
+/**
+ * Updates the user's username.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The success message.
+ */
+const updateUsername = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const userId = decoded.id
+    const user = await User.findById(userId)
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' })
+    }
+    if (user.username == req.body.username) {
+        return res.status(400).json({ message: 'New Username can not be same as earlier' })
+    }
+    await User.where('username', req.body.username).then(async (result) => {
+        if (result.length > 0) {
+            return res.status(400).json({ message: 'Username already exists' })
+        } else {
+            user.username = req.body.username
+            await user.save().then(() => {
+                return res.status(200).json({ message: 'Username is updated' })
+            })
+        }
+    })
+}    
+
+/**
+ * Updates the user's password.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The success message.
+ */
+const updatePassword = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const userId = decoded.id
+    const user = await User.findById(userId)
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' })
+    }
+    await (bcrypt.compare(req.body.newPassword, user.password)).then(async result => {
+        if (result) {
+            return res.status(400).json({ message: 'New password can not be same as earlier' })
+        } else {
+            await bcrypt.compare(req.body.password, user.password).then(async result => {
+                if (result) {
+                    const salt = await bcrypt.genSalt(10);
+                    const password = await bcrypt.hash(req.body.newPassword, salt);
+                    user.password = password
+                    await user.save().then(() => {
+                        return res.status(200).json({ message: 'Password is updated' })
+                    })
+                } else {
+                    return res.status(400).json({ message: 'Current password is incorrect' })
+                }
+            })
+        }
+    })
+}
+
+/**
+ * Checks the expiry of the JWT token.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The expiry time of the token.
+ */
+const checkTokenExpiry = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1]
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const expiryTime = decoded.exp    
+        res.status(200).json({ expiry: expiryTime })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+/**
+ * Sends an OTP to reset the user's password.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The success message.
+ */
+const sendResetOTP = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        const otp = Math.floor(100000 + Math.random() * 900000)
+        user.otp = otp
+        await user.save().then((user) => {
+            const mailOptions = {
+                from: 'alzisun16917@gmail.com',
+                to: req.body.email,
+                subject: 'Password Reset',
+                text: `Your OTP for resetting your password is: ${user.otp}`
+            }
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            })
+            res.status(200).json({ message: 'OTP sent', email: req.body.email })
+        })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+/**
+ * Validates the OTP for password reset.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The success message.
+ */
+const validateOTP = async (req, res) => {
+    try {
+        const user = await User.findOne({ email : req.body.email })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        if (user.otp != req.body.otp) {
+            return res.status(400).json({ message: 'OTP is invalid' })
+        }
+        res.status(200).json({ message: 'OTP is valid' })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
+/**
+ * Handle password reset.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The success message.
+ */
+const resetPassword = async (req, res) => {
+    try {
+        const user = await User.findOne({ email : req.body.email })
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        if (user.otp != req.body.otp) {
+            return res.status(400).json({ message: 'OTP is invalid' })
+        }
+        const salt = await bcrypt.genSalt(10);
+        const password = await bcrypt.hash(req.body.password, salt);
+        user.password = password
+        await user.save().then(() => {
+            return res.status(200).json({ message: 'Password is updated' })
+        })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+}
+
 //Export functions
 module.exports = { 
     getUserData,
@@ -261,5 +449,12 @@ module.exports = {
     login,
     updateUserData,
     updateEmailSendOTP,
-    updateEmail
+    updateEmail,
+    checkUsername,
+    updateUsername,
+    updatePassword,
+    checkTokenExpiry,
+    sendResetOTP,
+    validateOTP,
+    resetPassword
 }
